@@ -1,0 +1,69 @@
+from random import randint
+
+def repeated_digits_check(x):
+    global d_check
+    if d_no[x]-d_check[x]>0:
+        print(f'\033[38;2;217;198;89m{x}\033[0m')
+        d_check[x]+=1
+    else:
+        print(x)
+
+number = randint(10000,99999)
+str_no=str(number)
+d_no=dict()
+for v in str_no:
+    if v not in d_no:
+        d_no[v]=1
+    else: d_no[v]+=1
+
+count_acceptable=True
+game_not_won=True
+count=0
+
+print("Welcome to Number Wordle!")
+
+while count_acceptable and game_not_won:
+    in_correct_place=0
+    guess=0
+    while guess<10000 or guess>99999:
+        try:
+            guess=int(input('Enter a five digit number from 10000 to 99999:'))
+        except ValueError:
+            print("The number needs to be an integer between 10000 and 99999!")
+
+    str_guess=str(guess)
+    d_guess=dict()
+    for v in str_guess:
+            if v not in d_guess:
+                d_guess[v]=1
+            else: d_guess[v]+=1
+    d_check=dict()
+    for v in str_guess:
+        if v not in d_check:
+            d_check[v]=0
+    for i in range(5):
+        if str_guess[i]== str_no[i]:
+            d_check[str_guess[i]]+=1
+
+    number_list=[str_no[0],str_no[1],str_no[2],str_no[3],str_no[4]]
+    for i in range(5):
+        if str_guess[i] in number_list:
+            if str_guess[i]== str_no[i]:
+                in_correct_place+=1
+                print(f'\033[38;2;139;217;130m{str_guess[i]}\033[0m')
+            else:
+                repeated_digits_check(str_guess[i])
+        else:
+            print(str_guess[i])
+
+        if in_correct_place==5:
+            print('You won!')
+            print('You guessed',count+1,'times.')
+            game_not_won=False
+            break
+    count+=1
+    if count==10:
+        count_acceptable=False
+        print('Better luck next time! The number was', number)
+        
+
